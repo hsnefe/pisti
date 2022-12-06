@@ -1,5 +1,5 @@
 package pisti;
-
+import java.util.Random;
 public class pisti {
 
     
@@ -36,6 +36,20 @@ public class pisti {
             
         }
         return tar;
+    }
+    public static cards[] shuffler(cards[] deck){
+        Random rd = new Random();
+        for(int i =0;i<51;i++){
+            cards a = new cards("0","0","0");
+            if(i<51){
+                int b = rd.nextInt(51);
+                a = deck[i];
+                deck[i] = deck[b];
+                deck[b] = deck[i];
+            }
+            deck[51] = deck[1];
+        }
+        return deck;
     }
     public static void main(String[] args){
         cards[] card = new cards[51];

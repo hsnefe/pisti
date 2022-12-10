@@ -4,8 +4,8 @@ public class pisti {
 
     
     public  static cards[] suiter(int a,int b,cards[] tar){
-        if((b+1%13)<11&&(b%13)>0){
-            tar[b].setNumber(String.valueOf(b+1%13));
+        if(((b+1)%13)<11&&(b+1%13)>0){
+            tar[b].setNumber(String.valueOf((b+1)%13));
         }
         switch((b+1)%13){
             case(1):
@@ -21,20 +21,10 @@ public class pisti {
             tar[b].setNumber("KING");
             break;
         }
-        switch((a+1)%4){
-            case(1):
-            tar[a].setSuit("♠");
-            break;
-            case(2):
-            tar[a].setSuit("♣");
-            break;
-            case(3):
-            tar[a].setSuit("♥");
-            case(0):
-            tar[a].setSuit("♦");
-
-            
-        }
+        if(a+1<14) tar[a].setSuit("♣");
+        if((a+1<27)&&(a+1>13)) tar[a].setSuit("♠");
+        if((a+1<40)&&(a+1>26)) tar[a].setSuit("♦");
+        if(a+1>39) tar[a].setSuit("♥");
         return tar;
     }
     public static cards[] shuffler(cards[] deck){
@@ -59,11 +49,8 @@ public class pisti {
             for(int k = 0;k<52;k++){
                     suiter(k,k,card);
             }
-                for(cards i : card){
-                        
-                    System.out.println(i.getNumber());
 
-                }
+                
     }      
 }
         

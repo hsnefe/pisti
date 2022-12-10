@@ -1,5 +1,6 @@
 package pisti;
 import java.util.Random;
+import java.util.Scanner;
 public class pisti {
 
     
@@ -41,16 +42,45 @@ public class pisti {
         }
         return deck;
     }
+    public static cards[] cutter(cards[] deck,int a){
+        cards[] part1 = new cards[a+1];
+        cards[] part2 = new cards[51-a];
+        int x = 0;
+        for(int i =0;i<52;i++){
+            if(i<=a) part1[i] = new cards(deck[i].getSuit(),deck[i].getNumber());
+            if(i>a){
+                part2[x] = deck[i];
+                x++;
+            }
+        }
+        int y =0;
+        for(int k = 0;k<52;k++){
+            if(k<=50-a) deck[k] = part2[k];
+            if(k>50-a){
+                deck[k] = part1[y]; 
+                y++;
+            }
+        }
+        
+        return deck;
+    }
     public static void main(String[] args){
         cards[] card = new cards[52];
         for(int i = 0;i<52;i++){
             card[i] = new cards("0","0");
         }
-            for(int k = 0;k<52;k++){
-                    suiter(k,k,card);
-            }
-
-                
+        for(int k = 0;k<52;k++){
+                    card = suiter(k,k,card);
+        }
+        card =shuffler(card);
+        Scanner sc = new Scanner(System.in);
+        int cutn=sc.nextInt();
+        card = cutter(card,cutn);
+        for(cards i : card){
+                        
+        System.out.println(i.getNumber());
+        System.out.print(i.getSuit());
+        }
     }      
 }
         

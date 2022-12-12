@@ -64,6 +64,27 @@ public class pisti {
         
         return deck;
     }
+    public static cards[] dealer(cards[] deck,cards[] hand,int a){
+        int b =0;
+        int c =0;
+        if(a%2 ==0){
+            for(int i = 0;(i<8)&&(b<4);i++){
+                if(i%2==0){
+                    hand[b] = deck[i];
+                    b++;
+                }
+            }
+        }
+        else{
+            for(int i = 0;(i<8)&&(b<4);i++){
+                if(i%2==1){
+                    hand[b] = deck[i];
+                    b++;
+                }
+            }
+        }
+        return hand;
+    }
     public static void main(String[] args){
         cards[] card = new cards[52];
         for(int i = 0;i<52;i++){
@@ -72,11 +93,18 @@ public class pisti {
         for(int k = 0;k<52;k++){
                     card = suiter(k,k,card);
         }
+        System.out.println("CARDS ARE READY, SHUFFLING...");
         card =shuffler(card);
         Scanner sc = new Scanner(System.in);
+        System.out.println("CARDS ARE SHUFFLED, CHOOSE A NUMBER TO CUT");
         int cutn=sc.nextInt();
         card = cutter(card,cutn);
-        for(cards i : card){
+        System.out.println("DEALING");
+        cards[] phand = new cards[4];
+        cards[] aihand = new cards[4];
+        phand = dealer(card,phand,0);
+        aihand = dealer(card,aihand,1);
+        for(cards i : phand){
                         
         System.out.println(i.getNumber());
         System.out.print(i.getSuit());

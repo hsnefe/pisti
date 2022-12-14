@@ -1,6 +1,8 @@
 package pisti;
 import java.util.Random;
 import java.util.Scanner;
+
+import javax.crypto.spec.GCMParameterSpec;
 public class pisti {
 
     
@@ -66,8 +68,7 @@ public class pisti {
     }
     public static cards[] dealer(cards[] deck,cards[] hand,int a){
         int b =0;
-        int c =0;
-        if(a%2 ==0){
+        if(a%3 ==0){
             for(int i = 0;(i<8)&&(b<4);i++){
                 if(i%2==0){
                     hand[b] = deck[i];
@@ -75,15 +76,27 @@ public class pisti {
                 }
             }
         }
-        else{
+        else if(a%3 ==1){
             for(int i = 0;(i<8)&&(b<4);i++){
                 if(i%2==1){
                     hand[b] = deck[i];
                     b++;
                 }
+            }}
+            else if(a%3==2){ 
+            for(int j = 8;j<12;j++){
+                hand[j-8] = deck[j];
             }
         }
+        
         return hand;
+    }
+    public static cards takecard(cards[] deck,int used){
+        return deck[used+1];
+    }
+    public static cards[] player(cards[]table,int used,cards[]hand,int turn, cards throwed,cards[] deck){
+        table[turn] = throwed;
+        return table;
     }
     public static void main(String[] args){
         cards[] card = new cards[52];
@@ -104,11 +117,23 @@ public class pisti {
         cards[] aihand = new cards[4];
         phand = dealer(card,phand,0);
         aihand = dealer(card,aihand,1);
+        int usedcards = 11;
+        cards[] table = new cards[52];
+        table = dealer(card,table,2);
         for(cards i : phand){
-                        
-        System.out.println(i.getNumber());
-        System.out.print(i.getSuit());
+            System.out.print(i.getNumber());
+            System.out.println(i.getSuit());
+            }
+        System.out.println("Choose A Card To play");
+        int play = sc.nextInt();
+        int turn =0;
+        player(table,usedcards,phand,turn,phand[play],card);
+        phand[play] = takecard(card,usedcards);
+        for(cards i : phand){
+        System.out.print(i.getNumber());
+        System.out.println(i.getSuit());
         }
+        sc.close();
     }      
 }
         

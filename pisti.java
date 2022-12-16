@@ -1,8 +1,6 @@
 package pisti;
 import java.util.Random;
 import java.util.Scanner;
-
-import javax.crypto.spec.GCMParameterSpec;
 public class pisti {
 
     
@@ -66,10 +64,10 @@ public class pisti {
         
         return deck;
     }
-    public static cards[] dealer(cards[] deck,cards[] hand,int a){
+    public static cards[] dealer(cards[] deck,cards[] hand,int a,int c){
         int b =0;
         if(a%3 ==0){
-            for(int i = 0;(i<8)&&(b<4);i++){
+            for(int i = c*8;(i<c*8+8)&&(b<4);i++){
                 if(i%2==0){
                     hand[b] = deck[i];
                     b++;
@@ -91,11 +89,8 @@ public class pisti {
         
         return hand;
     }
-    public static cards takecard(cards[] deck,int used){
-        return deck[used+1];
-    }
-    public static cards[] player(cards[]table,int used,cards[]hand,int turn, cards throwed,cards[] deck){
-        table[turn] = throwed;
+    public static cards[] cardplayer(cards[]table,int turn, cards throwed){
+        table[turn+4] = throwed;
         return table;
     }
     public static void main(String[] args){
@@ -115,25 +110,45 @@ public class pisti {
         System.out.println("DEALING");
         cards[] phand = new cards[4];
         cards[] aihand = new cards[4];
-        phand = dealer(card,phand,0);
-        aihand = dealer(card,aihand,1);
+        phand = dealer(card,phand,0,0);
+        aihand = dealer(card,aihand,1,0);
         int usedcards = 11;
         cards[] table = new cards[52];
-        table = dealer(card,table,2);
+        table = dealer(card,table,2,0);
         for(cards i : phand){
             System.out.print(i.getNumber());
             System.out.println(i.getSuit());
             }
-        System.out.println("Choose A Card To play");
-        int play = sc.nextInt();
         int turn =0;
-        player(table,usedcards,phand,turn,phand[play],card);
-        phand[play] = takecard(card,usedcards);
-        for(cards i : phand){
+        int dealturn =1;
+        for(;usedcards<51;usedcards++){
+            for(int i =0;i!=8;i++){
+                if(i%2==1){
+
+                    System.out.println("Choose A Card To play");
+                    //Daha önce kullanılmadığını doğrula; kullanılmadıysa devam et, kullanıldıysa yeni değer iste
+                    //For>else>i=0,play=sc.nextInt 
+                    int play = sc.nextInt();
+                    cardplayer(table,turn,phand[play-1]);
+                    turn++;
+                }
+                if(i%2==0){
+                    cardplayer(table,turn,aihand[0]);
+                }
+            }
+            dealturn++;
+            phand = dealer(card,phand,0,dealturn);
+            aihand = dealer(card,aihand,1,dealturn);
+            for(cards i : phand){
+                System.out.print(i.getNumber());
+                System.out.println(i.getSuit());
+                }
+        }
+        /*for(cards i : phand){
         System.out.print(i.getNumber());
         System.out.println(i.getSuit());
-        }
-        sc.close();
+        }*/
+        System.out.println(table[5].getNumber());
     }      
 }
         

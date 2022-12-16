@@ -7,25 +7,42 @@ public class pisti {
     public  static cards[] suiter(int a,int b,cards[] tar){
         if(((b+1)%13)<11&&(b+1%13)>0){
             tar[b].setNumber(String.valueOf((b+1)%13));
+            tar[b].setNumberrank((b+1)%13);
         }
         switch((b+1)%13){
             case(1):
             tar[b].setNumber("ACE");
+            tar[b].setNumberrank(1);
             break;
             case(11):
             tar[b].setNumber("JACK");
+            tar[b].setNumberrank(11);
             break;
             case(12):
             tar[b].setNumber("QUEEN");
+            tar[b].setNumberrank(12);
             break;
             case(0):
             tar[b].setNumber("KING");
+            tar[b].setNumberrank(13);
             break;
         }
-        if(a+1<14) tar[a].setSuit("♣");
-        if((a+1<27)&&(a+1>13)) tar[a].setSuit("♠");
-        if((a+1<40)&&(a+1>26)) tar[a].setSuit("♦");
-        if(a+1>39) tar[a].setSuit("♥");
+        if(a+1<14){  
+            tar[a].setSuitrank(1);
+            tar[a].setSuit("♣");
+        }
+        if((a+1<27)&&(a+1>13)) {
+            tar[a].setSuitrank(2);
+            tar[a].setSuit("♠");
+        }
+        if((a+1<40)&&(a+1>26)) {
+            tar[a].setSuitrank(3);
+            tar[a].setSuit("♦");
+        }
+        if(a+1>39) {
+            tar[a].setSuitrank(4);
+            tar[a].setSuit("♥");
+        }
         return tar;
     }
     public static cards[] shuffler(cards[] deck){
@@ -124,11 +141,21 @@ public class pisti {
         for(;usedcards<51;usedcards++){
             for(int i =0;i!=8;i++){
                 if(i%2==1){
-
                     System.out.println("Choose A Card To play");
+                    int play = sc.nextInt();
+                    for(int j=0;j<turn;j++){
+                        if((table[j].getNumberrank()== play) && ((table[j].getSuitrank())== play)){
+                            System.out.println("You can't play that card,play a different card");
+                            play = sc.nextInt();
+                            
+                        }
+                        else{
+                            continue;
+                        }
+                    }
                     //Daha önce kullanılmadığını doğrula; kullanılmadıysa devam et, kullanıldıysa yeni değer iste
                     //For>else>i=0,play=sc.nextInt 
-                    int play = sc.nextInt();
+                    
                     cardplayer(table,turn,phand[play-1]);
                     turn++;
                 }

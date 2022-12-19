@@ -108,8 +108,6 @@ public class pisti {
     }
     public static cards[] cardplayer(cards[]table,int turn, cards throwed){
         table[turn+1] = throwed;
-        System.out.println(throwed.getNumber()+throwed.getSuit()+" is the top of table");
-        throwed = null;
         return table;
     }
     public static void main(String[] args){
@@ -140,11 +138,20 @@ public class pisti {
             }
         int turn =3;
         int dealturn =1;
-        for(;usedcards<51;usedcards++){
+        for(;usedcards<52;usedcards=usedcards+12){
             for(int i =0;i!=9;i++){
                 if(i%2==1){
                     System.out.println("YOUR TURN:");
                     System.out.println("Choose A Card To play");
+                    int option = 1;
+                    for(cards l : phand){
+                        if(l==null) option++;
+                        else{ 
+                        System.out.print(option+")  ");
+                        System.out.print(l.getNumber());
+                        System.out.println(l.getSuit());
+                        option++;}
+                        }
                     int play = sc.nextInt();
                     for(int j=0;j<turn;j++){
                         if((table[turn-j].getNumberrank()== phand[play-1].getNumberrank()) && ((table[turn-j].getSuitrank())== phand[play-1].getSuitrank())){
@@ -158,11 +165,14 @@ public class pisti {
                     //For>else>i=0,play=sc.nextInt 
                     
                     cardplayer(table,turn,phand[play-1]);
+                    phand[play-1] = null;
                     turn++;
                 }
                 if(i%2==0){
-                    System.out.println("OPONENT'S TURN:");
+                    System.out.println("OPPONENT'S TURN:");
                     cardplayer(table,turn,aihand[0]);
+                    System.out.println("OPPONENT PLAYED THE:"+ table[turn+1].getNumber()+table[turn+1].getSuit());
+                    turn++;
                     
                 }
             }
@@ -179,7 +189,42 @@ public class pisti {
         System.out.print(i.getNumber());
         System.out.println(i.getSuit());
         }*/
-        System.out.println(table[5].getNumber());
+        for(int i =0;i!=9;i++){
+            if(i%2==1){
+                
+                System.out.println("YOUR TURN:");
+                System.out.println("Choose A Card To play");
+                int option = 1;
+                for(cards l : phand){
+                    if(l==null) option++;
+                    else{ 
+                    System.out.print(option+")  ");
+                    System.out.print(l.getNumber());
+                    System.out.println(l.getSuit());
+                    option++;}}
+                int play = sc.nextInt();
+                for(int j=0;j<turn;j++){
+                    if((table[turn-j].getNumberrank()== phand[play-1].getNumberrank()) && ((table[turn-j].getSuitrank())== phand[play-1].getSuitrank())){
+                        System.out.println("You can't play that card,play a different card");
+                        play = sc.nextInt();
+                    }
+                    else{
+                    }
+                }
+                
+                cardplayer(table,turn,phand[play-1]);
+                phand[play-1] = null;
+                turn++;
+            }
+            if(i%2==0){
+                System.out.println("OPONENT'S TURN:");
+                cardplayer(table,turn,aihand[0]);
+                System.out.println("OPPONENT PLAYED THE:"+ table[turn+1].getNumber()+table[turn+1].getSuit());
+                turn++;
+                
+            }
+        }
+        System.out.println("//// END OF THE GAME\\\\\\");
     }      
 }
         

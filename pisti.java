@@ -147,7 +147,6 @@ public class pisti {
                     System.out.println("Choose A Card To play");
                     int play = sc.nextInt();
                     for(int j=0;j<turn;j++){
-                        if((table[j].getNumberrank()== play) && ((table[j].getSuitrank())== play)){
                         if((table[turn-j].getNumberrank()== phand[play-1].getNumberrank()) && ((table[turn-j].getSuitrank())== phand[play-1].getSuitrank())){
                             System.out.println("You can't play that card,play a different card");
                             play = sc.nextInt();

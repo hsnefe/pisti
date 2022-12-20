@@ -4,27 +4,28 @@ import java.util.Scanner;
 public class pisti {
 
     
-    public  static cards[] suiter(int a,int b,cards[] tar){
-        if(((b+1)%13)<11&&(b+1%13)>0){
-            tar[b].setNumber(String.valueOf((b+1)%13));
-            tar[b].setNumberrank((b+1)%13);
+    public  static cards[] suiter(int a,cards[] tar){
+        tar[a].setPoint(1);
+        if(((a+1)%13)<11&&(a+1%13)>0){
+            tar[a].setNumber(String.valueOf((a+1)%13));
+            tar[a].setNumberrank((a+1)%13);
         }
-        switch((b+1)%13){
+        switch((a+1)%13){
             case(1):
-            tar[b].setNumber("ACE");
-            tar[b].setNumberrank(1);
+            tar[a].setNumber("ACE");
+            tar[a].setNumberrank(1);
             break;
             case(11):
-            tar[b].setNumber("JACK");
-            tar[b].setNumberrank(11);
+            tar[a].setNumber("JACK");
+            tar[a].setNumberrank(11);
             break;
             case(12):
-            tar[b].setNumber("QUEEN");
-            tar[b].setNumberrank(12);
+            tar[a].setNumber("QUEEN");
+            tar[a].setNumberrank(12);
             break;
             case(0):
-            tar[b].setNumber("KING");
-            tar[b].setNumberrank(13);
+            tar[a].setNumber("KING");
+            tar[a].setNumberrank(13);
             break;
         }
         if(a+1<14){  
@@ -43,6 +44,9 @@ public class pisti {
             tar[a].setSuitrank(4);
             tar[a].setSuit("♥");
         }
+        if((tar[a].getSuitrank()==1)&&(tar[a].getNumberrank()==2)) tar[a].setPoint(3);
+        else if((tar[a].getSuitrank()==3)&&(tar[a].getNumberrank()==10)) tar[a].setPoint(4);
+        else tar[a].setPoint(1);
         return tar;
     }
     public static cards[] shuffler(cards[] deck){
@@ -116,7 +120,7 @@ public class pisti {
             card[i] = new cards("0","0");
         }
         for(int k = 0;k<52;k++){
-                    card = suiter(k,k,card);
+                    card = suiter(k,card);
         }
         System.out.println("CARDS ARE READY, SHUFFLING...");
         card =shuffler(card);
@@ -130,6 +134,8 @@ public class pisti {
         phand = dealer(card,phand,0,0);
         aihand = dealer(card,aihand,1,0);
         int usedcards = 11;
+        int ppoint = 0;
+        int aipoint = 0;
         cards[] table = new cards[52];
         table = dealer(card,table,2,0);
         for(cards i : phand){
@@ -154,7 +160,7 @@ public class pisti {
                         }
                     int play = sc.nextInt();
                     for(int j=0;j<turn;j++){
-                        if((table[turn-j].getNumberrank()== phand[play-1].getNumberrank()) && ((table[turn-j].getSuitrank())== phand[play-1].getSuitrank())){
+                        if(phand[play-1]==null){
                             System.out.println("You can't play that card,play a different card");
                             play = sc.nextInt();
                         }
@@ -166,6 +172,12 @@ public class pisti {
                     
                     cardplayer(table,turn,phand[play-1]);
                     phand[play-1] = null;
+                    if(table[turn]==table[turn+1]){ 
+                        for(int nuller = i;nuller>0;nuller--){
+                            ppoint += table[turn-nuller].getPoint();
+                            table[turn-nuller]=null;
+                        }
+                    }
                     turn++;
                 }
                 if(i%2==0){

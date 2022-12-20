@@ -5,6 +5,7 @@ public class cards {
     private String number;
     private int suitrank;
     private int numberrank;
+    private int point;
     public cards(String a,String b){
         suit = a;
         number = b;
@@ -17,4 +18,6 @@ public class cards {
         public int getSuitrank(){return suitrank;}
         public void setNumberrank(int a){numberrank=a;}
         public int getNumberrank(){return numberrank;}
+        public void setPoint(int a){point = a;}
+        public int getPoint(){return point;}
 }

@@ -59,7 +59,6 @@ public class pisti {
                 deck[i] = deck[b];
                 deck[b] = a;
             }
-            deck[51] = deck[1];
         }
         return deck;
     }
@@ -68,7 +67,7 @@ public class pisti {
         cards[] part2 = new cards[51-a];
         int x = 0;
         for(int i =0;i<52;i++){
-            if(i<=a) part1[i] = deck[i]; // new cards(deck[i].getSuit(),deck[i].getNumber());
+            if(i<=a) part1[i] = deck[i];
             if(i>a){
                 part2[x] = deck[i];
                 x++;
@@ -115,6 +114,7 @@ public class pisti {
         return table;
     }
     public static void main(String[] args){
+        Random rd = new Random();
         cards[] card = new cards[52];
         for(int i = 0;i<52;i++){
             card[i] = new cards("0","0");
@@ -136,6 +136,9 @@ public class pisti {
         int usedcards = 11;
         int ppoint = 0;
         int aipoint = 0;
+        int playerpocket = 0;
+        int aipocket=0;
+        int boardsize = 3;
         cards[] table = new cards[52];
         table = dealer(card,table,2,0);
         for(cards i : phand){
@@ -145,7 +148,7 @@ public class pisti {
         int turn =3;
         int dealturn =1;
         for(;usedcards<52;usedcards=usedcards+12){
-            for(int i =0;i!=9;i++){
+            for(int i =0;i!=8;i++){
                 if(i%2==1){
                     System.out.println("YOUR TURN:");
                     System.out.println("Choose A Card To play");
@@ -159,7 +162,7 @@ public class pisti {
                         option++;}
                         }
                     int play = sc.nextInt();
-                    for(int j=0;j<turn;j++){
+                    while(phand[play-1]==null){ 
                         if(phand[play-1]==null){
                             System.out.println("You can't play that card,play a different card");
                             play = sc.nextInt();
@@ -167,22 +170,45 @@ public class pisti {
                         else{
                         }
                     }
-                    //Daha önce kullanılmadığını doğrula; kullanılmadıysa devam et, kullanıldıysa yeni değer iste
-                    //For>else>i=0,play=sc.nextInt 
-                    
                     cardplayer(table,turn,phand[play-1]);
                     phand[play-1] = null;
-                    if(table[turn]==table[turn+1]){ 
-                        for(int nuller = i;nuller>0;nuller--){
-                            ppoint += table[turn-nuller].getPoint();
-                            table[turn-nuller]=null;
+                    boardsize++;
+                    if(table[turn].getNumberrank()==table[turn+1].getNumberrank()){ 
+                        playerpocket +=boardsize+1;
+                        for(int nuller = boardsize;nuller>0;nuller--){
+                            if(table[turn-1]==null){ 
+                                table[turn+1].setPoint(10+table[turn].getPoint());
+                            ppoint = ppoint + table[turn+1-nuller].getPoint();
+                        System.out.println("!!!!!!!!!!!!PİSTİİİİ!!!!!!!!!!!!");
+                        boardsize =0;
+                    }
+                    else ppoint = ppoint + table[turn+1-nuller].getPoint();
+                            table[turn+1-nuller]=null;
                         }
+                        boardsize = 0;
                     }
                     turn++;
                 }
                 if(i%2==0){
                     System.out.println("OPPONENT'S TURN:");
-                    cardplayer(table,turn,aihand[0]);
+                    int oyna = rd.nextInt(4);
+                while(aihand[oyna]==null) oyna = rd.nextInt(4);
+                cardplayer(table,turn,aihand[oyna]);
+                    boardsize++;
+                    if(table[turn].getNumberrank()==table[turn+1].getNumberrank()){ 
+                        aipocket +=boardsize+1;
+                        for(int nuller = boardsize;nuller>0;nuller--){
+                            if(table[turn-1]==null){ 
+                                table[turn+1].setPoint(10+table[turn].getPoint());
+                            aipoint = aipoint + table[turn+1-nuller].getPoint();
+                        System.out.println("!!!!!!!!!!!!PİSTİİİİ!!!!!!!!!!!!");
+                        boardsize =0;
+                    }
+                       else     aipoint = aipoint + table[turn+1-nuller].getPoint();
+                            table[turn+1-nuller]=null;
+                        }
+                        boardsize = 0;
+                    }
                     System.out.println("OPPONENT PLAYED THE:"+ table[turn+1].getNumber()+table[turn+1].getSuit());
                     turn++;
                     
@@ -201,7 +227,7 @@ public class pisti {
         System.out.print(i.getNumber());
         System.out.println(i.getSuit());
         }*/
-        for(int i =0;i!=9;i++){
+        for(int i =0;i!=8;i++){
             if(i%2==1){
                 
                 System.out.println("YOUR TURN:");
@@ -216,27 +242,66 @@ public class pisti {
                     option++;}}
                 int play = sc.nextInt();
                 for(int j=0;j<turn;j++){
-                    if((table[turn-j].getNumberrank()== phand[play-1].getNumberrank()) && ((table[turn-j].getSuitrank())== phand[play-1].getSuitrank())){
+                    if(phand[play-1]==null){
                         System.out.println("You can't play that card,play a different card");
                         play = sc.nextInt();
                     }
                     else{
                     }
                 }
-                
                 cardplayer(table,turn,phand[play-1]);
                 phand[play-1] = null;
+                boardsize++;
+                    if(table[turn].getNumberrank()==table[turn+1].getNumberrank()){ 
+                        playerpocket +=boardsize+1;
+                        for(int nuller = boardsize;nuller>0;nuller--){
+                            if(table[turn-1]==null){ 
+                                table[turn+1].setPoint(10+table[turn].getPoint());
+                            ppoint = ppoint + table[turn+1-nuller].getPoint();
+                        System.out.println("!!!!!!!!!!!!PİSTİİİİ!!!!!!!!!!!!");
+                        boardsize =0;
+                    }
+                    else ppoint = ppoint + table[turn+1-nuller].getPoint();
+                            table[turn+1-nuller]=null;
+                        }
+                        boardsize = 0;
+                    }
+                    if(table[turn].getNumberrank()==table[turn+1].getNumberrank()){ 
+                        playerpocket +=boardsize+1;
+                        for(int nuller = boardsize;nuller>0;nuller--){
+                            
+                            ppoint = ppoint + table[turn+1-nuller].getPoint();
+                            table[turn+1-nuller]=null;
+                        }
+                        boardsize = 0;
+                    }
                 turn++;
             }
             if(i%2==0){
                 System.out.println("OPONENT'S TURN:");
-                cardplayer(table,turn,aihand[0]);
+                int oyna = rd.nextInt(4);
+                while(aihand[oyna]==null) oyna = rd.nextInt(4);
+                cardplayer(table,turn,aihand[oyna]);
+                boardsize++;
+                if(table[turn].getNumberrank()==table[turn+1].getNumberrank()){ 
+                    aipocket +=boardsize+1;
+                    for(int nuller = boardsize;nuller>0;nuller--){
+                        aipoint = aipoint + table[turn+1-nuller].getPoint();
+                        table[turn+1-nuller]=null;
+                    }
+                    boardsize = 0;
+                }
+                aihand[oyna]=null;
                 System.out.println("OPPONENT PLAYED THE:"+ table[turn+1].getNumber()+table[turn+1].getSuit());
                 turn++;
-                
             }
         }
         System.out.println("//// END OF THE GAME\\\\\\");
+        if(playerpocket>aipocket){
+            System.out.println("You have more cards");
+            ppoint+=3;
+        }
+        System.out.println(ppoint);
     }      
 }
         

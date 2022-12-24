@@ -163,7 +163,7 @@ public class pisti {
                         }
                     int play = sc.nextInt();
                     while(phand[play-1]==null){ 
-                        if(phand[play-1]==null){
+                        if(phand[play-1]!=null){
                             System.out.println("You can't play that card,play a different card");
                             play = sc.nextInt();
                         }
@@ -173,43 +173,47 @@ public class pisti {
                     cardplayer(table,turn,phand[play-1]);
                     phand[play-1] = null;
                     boardsize++;
+                    if(table[turn]!=null){ 
                     if(table[turn].getNumberrank()==table[turn+1].getNumberrank()){ 
+                        if(table[turn-1]==null){ 
+                            table[turn+1].setPoint(10+table[turn].getPoint());
+                            System.out.println("!!!!!!!!!!!!PİSTİİİİ!!!!!!!!!!!!");
+                        }
                         playerpocket +=boardsize+1;
-                        for(int nuller = boardsize;nuller>0;nuller--){
-                            if(table[turn-1]==null){ 
-                                table[turn+1].setPoint(10+table[turn].getPoint());
+                        for(int nuller = boardsize;nuller>=0;nuller--){
                             ppoint = ppoint + table[turn+1-nuller].getPoint();
-                        System.out.println("!!!!!!!!!!!!PİSTİİİİ!!!!!!!!!!!!");
                         boardsize =0;
-                    }
-                    else ppoint = ppoint + table[turn+1-nuller].getPoint();
+                    ppoint = ppoint + table[turn+1-nuller].getPoint();
                             table[turn+1-nuller]=null;
                         }
                         boardsize = 0;
                     }
+                }
                     turn++;
                 }
                 if(i%2==0){
-                    System.out.println("OPPONENT'S TURN:");
+                                        System.out.println("OPPONENT'S TURN:");
                     int oyna = rd.nextInt(4);
                 while(aihand[oyna]==null) oyna = rd.nextInt(4);
                 cardplayer(table,turn,aihand[oyna]);
+                System.out.println("OPPONENT PLAYED THE:"+ table[turn+1].getNumber()+table[turn+1].getSuit());
+                aihand[oyna]=null;
                     boardsize++;
+                    if(table[turn]!=null){ 
                     if(table[turn].getNumberrank()==table[turn+1].getNumberrank()){ 
+                        if(table[turn-1]==null){ 
+                            table[turn+1].setPoint(10+table[turn].getPoint());
+                    System.out.println("!!!!!!!!!!!!PİSTİİİİ!!!!!!!!!!!!");
+                    boardsize =0;
+                }
                         aipocket +=boardsize+1;
-                        for(int nuller = boardsize;nuller>0;nuller--){
-                            if(table[turn-1]==null){ 
-                                table[turn+1].setPoint(10+table[turn].getPoint());
-                            aipoint = aipoint + table[turn+1-nuller].getPoint();
-                        System.out.println("!!!!!!!!!!!!PİSTİİİİ!!!!!!!!!!!!");
-                        boardsize =0;
-                    }
-                       else     aipoint = aipoint + table[turn+1-nuller].getPoint();
+                        for(int nuller = boardsize;nuller>=0;nuller--){
+                           aipoint = aipoint + table[turn+1-nuller].getPoint();
                             table[turn+1-nuller]=null;
                         }
                         boardsize = 0;
-                    }
-                    System.out.println("OPPONENT PLAYED THE:"+ table[turn+1].getNumber()+table[turn+1].getSuit());
+                    }}
+                    
                     turn++;
                     
                 }
@@ -223,10 +227,6 @@ public class pisti {
                 System.out.println(i.getSuit());
                 }
         }
-        /*for(cards i : phand){
-        System.out.print(i.getNumber());
-        System.out.println(i.getSuit());
-        }*/
         for(int i =0;i!=8;i++){
             if(i%2==1){
                 
@@ -254,7 +254,7 @@ public class pisti {
                 boardsize++;
                     if(table[turn].getNumberrank()==table[turn+1].getNumberrank()){ 
                         playerpocket +=boardsize+1;
-                        for(int nuller = boardsize;nuller>0;nuller--){
+                        for(int nuller = boardsize;nuller>=0;nuller--){
                             if(table[turn-1]==null){ 
                                 table[turn+1].setPoint(10+table[turn].getPoint());
                             ppoint = ppoint + table[turn+1-nuller].getPoint();
@@ -268,7 +268,7 @@ public class pisti {
                     }
                     if(table[turn].getNumberrank()==table[turn+1].getNumberrank()){ 
                         playerpocket +=boardsize+1;
-                        for(int nuller = boardsize;nuller>0;nuller--){
+                        for(int nuller = boardsize;nuller>=0;nuller--){
                             
                             ppoint = ppoint + table[turn+1-nuller].getPoint();
                             table[turn+1-nuller]=null;
@@ -285,7 +285,7 @@ public class pisti {
                 boardsize++;
                 if(table[turn].getNumberrank()==table[turn+1].getNumberrank()){ 
                     aipocket +=boardsize+1;
-                    for(int nuller = boardsize;nuller>0;nuller--){
+                    for(int nuller = boardsize;nuller>=0;nuller--){
                         aipoint = aipoint + table[turn+1-nuller].getPoint();
                         table[turn+1-nuller]=null;
                     }
@@ -304,7 +304,3 @@ public class pisti {
         System.out.println(ppoint);
     }      
 }
-        
-    
-    
-

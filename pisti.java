@@ -180,11 +180,10 @@ public class pisti {
                             System.out.println("!!!!!!!!!!!!PİSTİİİİ!!!!!!!!!!!!");
                         }
                         playerpocket +=boardsize+1;
-                        for(int nuller = boardsize;nuller>=0;nuller--){
-                            ppoint = ppoint + table[turn+1-nuller].getPoint();
-                        boardsize =0;
-                    ppoint = ppoint + table[turn+1-nuller].getPoint();
-                            table[turn+1-nuller]=null;
+                        for(cards win:table){
+                            if(win!= null){
+                                ppoint += win.getPoint();
+                            }
                         }
                         boardsize = 0;
                     }
@@ -202,14 +201,15 @@ public class pisti {
                     if(table[turn]!=null){ 
                     if(table[turn].getNumberrank()==table[turn+1].getNumberrank()){ 
                         if(table[turn-1]==null){ 
-                            table[turn+1].setPoint(10+table[turn].getPoint());
+                            table[turn+1].setPoint(10+table[turn+1].getPoint());
                     System.out.println("!!!!!!!!!!!!PİSTİİİİ!!!!!!!!!!!!");
                     boardsize =0;
                 }
                         aipocket +=boardsize+1;
-                        for(int nuller = boardsize;nuller>=0;nuller--){
-                           aipoint = aipoint + table[turn+1-nuller].getPoint();
-                            table[turn+1-nuller]=null;
+                        for(cards wincards: table){
+                            if(wincards!=null){
+                                aipoint+= wincards.getPoint();
+                            }
                         }
                         boardsize = 0;
                     }}
@@ -256,7 +256,7 @@ public class pisti {
                         playerpocket +=boardsize+1;
                         for(int nuller = boardsize;nuller>=0;nuller--){
                             if(table[turn-1]==null){ 
-                                table[turn+1].setPoint(10+table[turn].getPoint());
+                                table[turn+1].setPoint(10+table[turn+1].getPoint());
                             ppoint = ppoint + table[turn+1-nuller].getPoint();
                         System.out.println("!!!!!!!!!!!!PİSTİİİİ!!!!!!!!!!!!");
                         boardsize =0;

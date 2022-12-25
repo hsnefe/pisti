@@ -115,6 +115,10 @@ public class pisti {
         return table;
     }
     public static void main(String[] args){
+        player theplayer = new player(); 
+        Scanner sc = new Scanner(System.in);
+        System.out.println("Enter your name:"); 
+        theplayer.setName(sc.nextLine());
         Random rd = new Random();
         cards[] card = new cards[52];
         for(int i = 0;i<52;i++){
@@ -125,7 +129,6 @@ public class pisti {
         }
         System.out.println("CARDS ARE READY, SHUFFLING...");
         card =shuffler(card);
-        Scanner sc = new Scanner(System.in);
         System.out.println("CARDS ARE SHUFFLED, CHOOSE A NUMBER TO CUT");
         int cutn=sc.nextInt();
         card = cutter(card,cutn-1);
@@ -387,6 +390,7 @@ public class pisti {
         System.out.println("AI's score: "+aipoint);
         if(ppoint>aipoint) System.out.println("YOU WİN!");
         else System.out.println("YOU LOSED!!!");
+        theplayer.setScore(ppoint);
         
     }      
 }

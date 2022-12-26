@@ -3,6 +3,7 @@ import java.util.Random;
 import java.util.Scanner;
 import java.io.IOException;
 import java.util.Formatter;
+import java.util.InputMismatchException;
 import java.nio.file.Paths;
 public class pisti {
 
@@ -126,7 +127,7 @@ public class pisti {
                 thelist[hierarchy-1]= thelist[hierarchy];
                 thelist[hierarchy]= temp;
             }
-             return wraplayer(thelist,upcoming,hierarchy--);
+             return wraplayer(thelist,upcoming,hierarchy-1);
         }
     }
     }
@@ -299,7 +300,11 @@ public class pisti {
                 for(int j=0;j<turn;j++){
                     if(phand[play-1]==null){
                         System.out.println("You can't play that card,play a different card");
-                        play = sc.nextInt();
+                        try{ 
+                        play = sc.nextInt();}
+                        catch(InputMismatchException e){
+                            System.err.println("Enter an integer, please...");
+                        }
                     }
                     else{
                     }
@@ -409,21 +414,41 @@ public class pisti {
         theplayer.setScore(ppoint);
         Formatter f = null;
         player[] toplayers = new player[10];
+        Scanner reader = null;
+        try{
+            reader = new Scanner(Paths.get("scores.txt"));
+        while(reader.hasNextLine()){
+            String[] user = reader.nextLine().split(":");
+            for(int i =0;i<user.length;i++){
+                if(i%2==0) toplayers[i/2].setName(user[i]);
+                else toplayers[(i-1)/2].setScore(Integer.parseInt(user[i]));
+            }
+        }
+        player[] theultimatelist = wraplayer(toplayers,theplayer,10);
+        for(player t :theultimatelist){
+            System.out.print(t.getName()+":");
+            System.out.println(t.getScore());
+        }
+        }catch(Exception e){
+            try{
+     
+                f = new Formatter("scores.txt");
+                f.format("%s\n","Irem:95:Hasan:87:Bartu:56:Defne:38:Mert:37:Kirac:30:Erkan:29:Bora:21:Can:12:Yagız:0");
+            }
+            catch(IOException u){
+                System.err.println("Something's wrong");
+            }
+            finally{
+                if(f != null) f.close();
+            }
+        }
+        finally{
+        }
+        reader = null;
         for(int i = 0;i<toplayers.length;i++){
             toplayers[i] = new player("0",0);
         }
-        try{
-     
-            f = new Formatter("scores.txt");
-            f.format("%s\n","Irem:95:Hasan:87:Bartu:56:Defne:38:Mert:37:Kirac:30:Erkan:29:Bora:21:Can:12:Yagız:0");
-        }
-        catch(IOException e){
-            System.err.println("Something's wrong");
-        }
-        finally{
-            if(f != null) f.close();
-        }
-        Scanner reader = null;
+       
         try{ 
         reader = new Scanner(Paths.get("scores.txt"));
         while(reader.hasNextLine()){
@@ -434,6 +459,16 @@ public class pisti {
             }
         }
         player[] theultimatelist = wraplayer(toplayers,theplayer,10);
+        try{
+            for(player u : theultimatelist){ 
+                f = new Formatter("scores.txt");
+                f.format("%s,%s,%s,%s",":",u.getName(),":",u.getScore());
+            }
+        }catch(IOException e){
+            System.err.println("Something's wrong in the final formatter");
+        }finally{
+            if(f!=null) f.close();
+        }
         for(player t :theultimatelist){
             System.out.print(t.getName()+":");
             System.out.println(t.getScore());

@@ -2,6 +2,8 @@ package pisti;
 import java.util.Random;
 import java.util.Scanner;
 import java.io.IOException;
+import java.util.Formatter;
+import java.nio.file.Paths;
 public class pisti {
 
     
@@ -115,7 +117,7 @@ public class pisti {
         return table;
     }
     public static void main(String[] args){
-        player theplayer = new player(); 
+        player theplayer = new player("0",0); 
         Scanner sc = new Scanner(System.in);
         System.out.println("Enter your name:"); 
         theplayer.setName(sc.nextLine());
@@ -391,6 +393,36 @@ public class pisti {
         if(ppoint>aipoint) System.out.println("YOU WİN!");
         else System.out.println("YOU LOSED!!!");
         theplayer.setScore(ppoint);
+        Formatter f = null;
+        player[] toplayers = new player[10];
+        for(int i = 0;i<toplayers.length;i++){
+            toplayers[i] = new player("0",0);
+        }
+        try{
+     
+            f = new Formatter("scores.txt");
+            f.format("%s\n","Irem:95:Hasan:87:Bartu:56:Defne:38:Mert:37:Kirac:30:Erkan:29:Bora:21:Can:12:Yagız:0");
+        }
+        catch(IOException e){
+            System.err.println("Something's wrong");
+        }
+        finally{
+            if(f != null) f.close();
+        }
+        Scanner reader = null;
+        try{ 
+        reader = new Scanner(Paths.get("scores.txt"));
+        while(reader.hasNextLine()){
+            String[] user = reader.nextLine().split(":");
+            for(int i =0;i<user.length;i++){
+                if(i%2==0) toplayers[i/2].setName(user[i]);
+                else toplayers[(i-1)/2].setScore(Integer.parseInt(user[i]));
+            }
+        }
+        }
+        catch(IOException e){
+            e.printStackTrace();
+        }
         
     }      
 }

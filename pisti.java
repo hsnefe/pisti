@@ -116,6 +116,20 @@ public class pisti {
         table[turn+1] = throwed;
         return table;
     }
+    public static player[] wraplayer(player[]thelist,player upcoming,int hierarchy){
+        if(hierarchy<=1) return thelist;{ 
+        if(thelist[hierarchy-1].getScore()>upcoming.getScore()) return thelist;
+        else{ 
+            if(hierarchy==10) thelist[hierarchy-1]=upcoming;
+            else{
+                player temp = thelist[hierarchy-1];
+                thelist[hierarchy-1]= thelist[hierarchy];
+                thelist[hierarchy]= temp;
+            }
+             return wraplayer(thelist,upcoming,hierarchy--);
+        }
+    }
+    }
     public static void main(String[] args){
         player theplayer = new player("0",0); 
         Scanner sc = new Scanner(System.in);
@@ -418,6 +432,11 @@ public class pisti {
                 if(i%2==0) toplayers[i/2].setName(user[i]);
                 else toplayers[(i-1)/2].setScore(Integer.parseInt(user[i]));
             }
+        }
+        player[] theultimatelist = wraplayer(toplayers,theplayer,10);
+        for(player t :theultimatelist){
+            System.out.print(t.getName()+":");
+            System.out.println(t.getScore());
         }
         }
         catch(IOException e){

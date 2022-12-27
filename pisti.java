@@ -120,6 +120,7 @@ public class pisti {
     public static player[] wraplayer(player[]thelist,player upcoming,int hierarchy){
         if(hierarchy<=1) return thelist;{ 
         if(thelist[hierarchy-1].getScore()>upcoming.getScore()) return thelist;
+        else if(thelist[hierarchy-1].getScore()==upcoming.getScore()) return thelist;
         else{ 
             if(hierarchy==10) thelist[hierarchy-1]=upcoming;
             else{
@@ -183,7 +184,7 @@ public class pisti {
                         option++;}
                         }
                     int play = sc.nextInt();
-                    while(phand[play-1]==null){ 
+                    while(phand[play-1]==null||play>4){ 
                             System.out.println("You can't play that card,play a different card");
                             play = sc.nextInt();
                         
@@ -298,14 +299,17 @@ public class pisti {
                     option++;}}
                 int play = sc.nextInt();
                 for(int j=0;j<turn;j++){
-                    if(phand[play-1]==null){
+                    if(phand[play-1]==null||play>4){
                         System.out.println("You can't play that card,play a different card");
-                        try{ 
-                        play = sc.nextInt();}
-                        catch(InputMismatchException e){
-                            System.err.println("Enter an integer, please...");
-                        }
+                        
+                            try{ 
+                            play = sc.nextInt();
+                            
+                        }catch(Exception e){
+                                System.err.println("Enter an integer, please...");
+                            }
                     }
+                    
                     else{
                     }
                 }
@@ -414,15 +418,21 @@ public class pisti {
         theplayer.setScore(ppoint);
         Formatter f = null;
         player[] toplayers = new player[10];
+        for(int i = 0;i<toplayers.length;i++){
+            toplayers[i] = new player("0",0);
+        }
         Scanner reader = null;
+        int name_size= 0;
         try{
             reader = new Scanner(Paths.get("scores.txt"));
         while(reader.hasNextLine()){
-            String[] user = reader.nextLine().split(":");
-            for(int i =0;i<user.length;i++){
-                if(i%2==0) toplayers[i/2].setName(user[i]);
-                else toplayers[(i-1)/2].setScore(Integer.parseInt(user[i]));
+            if(name_size == 10) {
+                break;
             }
+            String[] user = reader.nextLine().split(",");
+            toplayers[name_size].setName(user[0]);
+            toplayers[name_size].setScore(Integer.parseInt(user[1]));
+            name_size+= 1;
         }
         player[] theultimatelist = wraplayer(toplayers,theplayer,10);
         for(player t :theultimatelist){
@@ -433,7 +443,7 @@ public class pisti {
             try{
      
                 f = new Formatter("scores.txt");
-                f.format("%s\n","Irem:95:Hasan:87:Bartu:56:Defne:38:Mert:37:Kirac:30:Erkan:29:Bora:21:Can:12:Yagız:0");
+                f.format("%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s","Irem,95","Hasan,87","Bartu,56","Defne,38","Mert,37","Kirac,30","Erkan,29","Ege,21","Can,12","Yagız,0");
             }
             catch(IOException u){
                 System.err.println("Something's wrong");
@@ -445,26 +455,23 @@ public class pisti {
         finally{
         }
         reader = null;
-        for(int i = 0;i<toplayers.length;i++){
-            toplayers[i] = new player("0",0);
-        }
-       
+       name_size = 0;
         try{ 
+            if(toplayers[0].getScore()==0){ 
         reader = new Scanner(Paths.get("scores.txt"));
         while(reader.hasNextLine()){
-            String[] user = reader.nextLine().split(":");
-            for(int i =0;i<user.length;i++){
-                if(i%2==0) toplayers[i/2].setName(user[i]);
-                else toplayers[(i-1)/2].setScore(Integer.parseInt(user[i]));
-            }
-        }
+            String[] user = reader.nextLine().split(",");
+            toplayers[name_size].setName(user[0]);
+            toplayers[name_size].setScore(Integer.parseInt(user[1]));
+            name_size++;
+        }}
         player[] theultimatelist = wraplayer(toplayers,theplayer,10);
         try{
+            f = new Formatter("scores.txt");
             for(player u : theultimatelist){ 
-                f = new Formatter("scores.txt");
-                f.format("%s,%s,%s,%s",":",u.getName(),":",u.getScore());
+                f.format("%s,%s\n",u.getName(),u.getScore());
             }
-        }catch(IOException e){
+        }catch(Exception e){
             System.err.println("Something's wrong in the final formatter");
         }finally{
             if(f!=null) f.close();

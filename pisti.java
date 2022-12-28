@@ -3,7 +3,6 @@ import java.util.Random;
 import java.util.Scanner;
 import java.io.IOException;
 import java.util.Formatter;
-import java.util.InputMismatchException;
 import java.nio.file.Paths;
 public class pisti {
 
@@ -433,11 +432,6 @@ public class pisti {
             toplayers[name_size].setName(user[0]);
             toplayers[name_size].setScore(Integer.parseInt(user[1]));
             name_size+= 1;
-        }
-        player[] theultimatelist = wraplayer(toplayers,theplayer,10);
-        for(player t :theultimatelist){
-            System.out.print(t.getName()+":");
-            System.out.println(t.getScore());
         }
         }catch(Exception e){
             try{

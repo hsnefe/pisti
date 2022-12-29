@@ -177,6 +177,7 @@ public class pisti {
         cards[] table = new cards[52];
         table = dealer(card,table,2,0);
         int turn =3;
+        System.out.print(table[turn].getNumber()+table[turn].getSuit()+"    is on the top of the table");
         int dealturn =1;
         for(;usedcards<52;usedcards=usedcards+12){
             for(int i =0;i!=8;i++){

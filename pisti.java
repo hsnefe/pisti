@@ -162,13 +162,10 @@ public class pisti {
               sc.next();
             }
           }
-        card = cutter(card,cutn-1);
-        System.out.println("DEALING");
+        card = cutter(card,cutn);
         cards[] phand = new cards[4];
         cards[] aihand = new cards[4];
-        phand = dealer(card,phand,0,0);
-        aihand = dealer(card,aihand,1,0);
-        int usedcards = 11;
+        int usedcards = 3;
         int ppoint = 0;
         int aipoint = 0;
         int playerpocket = 0;
@@ -177,9 +174,14 @@ public class pisti {
         cards[] table = new cards[52];
         table = dealer(card,table,2,0);
         int turn =3;
-        System.out.print(table[turn].getNumber()+table[turn].getSuit()+"    is on the top of the table");
-        int dealturn =1;
-        for(;usedcards<52;usedcards=usedcards+12){
+        System.out.println(table[turn].getNumber()+table[turn].getSuit()+"    is on the top of the table");
+        int dealturn =0;
+        boolean lastaker = true;
+        for(;usedcards<48;usedcards=usedcards+8){
+            System.out.println("BOTH OF THE PLAYER'S HANDS ARE EMPTY, DEALING NEW CARDS...");
+            phand = dealer(card,phand,0,dealturn);
+            aihand = dealer(card,aihand,1,dealturn);
+            dealturn++;
             for(int i =0;i!=8;i++){
                 if(i%2==1){
                     System.out.println("YOUR TURN:");
@@ -200,8 +202,8 @@ public class pisti {
                           int num = sc.nextInt();
                           System.out.println("You entered: " + num);
                           play = num-1;
-                          if(num>0&&num<5)break;
-                          else System.out.println("please enter an integer  between 1,4");
+                          if((num>0&&num<5)&&phand[play]!=null)break;
+                          else System.out.println("please enter an integer  between (1,4) and it must be not used yet");
                         } catch (InputMismatchException e) {
                           System.out.println("Invalid input. Please try again.");
                           sc.next();
@@ -227,6 +229,7 @@ public class pisti {
                             }
                             
                         boardsize = 0;
+                        lastaker = true; 
                     }
                     if(table[turn]!=null){ 
                     if(table[turn+1].getNumberrank()==11){ 
@@ -239,6 +242,7 @@ public class pisti {
                             }
                         }
                         boardsize = 0;
+                        lastaker = true;
                     }
                 }
                     
@@ -251,6 +255,7 @@ public class pisti {
                     for(cards smart: aihand){
                         if(smart!=null){ 
                         if(smart.getNumberrank()==table[turn].getNumberrank()){ 
+                            lastaker = false;
                             cardplayer(table,turn,smart);
                             smart = null;
                             boardsize++;
@@ -267,6 +272,7 @@ public class pisti {
                             for(int a=turn+1;a>=0;a--){
                                 table[a]=null;
                             }
+                            
                             boardsize = 0;
                             break;
                         }
@@ -281,7 +287,7 @@ public class pisti {
                     boardsize++;    
                     if(table[turn]!=null){  
                     if(table[turn+1].getNumberrank()==11){ 
-                        
+                        lastaker = false;
                         aipocket +=boardsize+1;
                         for(cards wincards: table){
                             if(wincards!=null){
@@ -297,125 +303,25 @@ public class pisti {
                 turn++;
                 }
             }
-            System.out.println("BOTH OF THE PLAYER'S HANDS ARE EMPTY, DEALING NEW CARDS...");
-            dealturn++;
-            phand = dealer(card,phand,0,dealturn);
-            aihand = dealer(card,aihand,1,dealturn);
+        } 
+        if(lastaker){
+            for(int a=turn;a>0;a--){
+                if(table[a] != null){
+                    ppoint += table[a].getPoint();
+                    table[a] = null;
+                    playerpocket++;
+                }
+            }
         }
-        for(int i =0;i!=8;i++){
-            if(i%2==1){
-                
-                System.out.println("YOUR TURN:");
-                System.out.println("Choose A Card To play");
-                int option = 1;
-                for(cards l : phand){
-                    if(l==null) option++;
-                    else{ 
-                    System.out.print(option+")  ");
-                    System.out.print(l.getNumber());
-                    System.out.println(l.getSuit());
-                    option++;}}
-                int play;
-                while (true) {
-                    System.out.print("Enter an integer: ");
-                    try {
-                      int num = sc.nextInt();
-                      System.out.println("You entered: " + num);
-                      play = num-1;
-                      if(num>0&&num<5)break;
-                          else System.out.println("please enter an integer  between 1,4");
-                    } catch (InputMismatchException e) {
-                      System.out.println("Invalid input. Please try again.");
-                      sc.next();
-                    }
-                  }
-                cardplayer(table,turn,phand[play]);
-                phand[play] = null;
-                boardsize++;
-                if(table[turn]!=null){ 
-                    if(table[turn].getNumberrank()==table[turn+1].getNumberrank()){ 
-                        playerpocket +=boardsize+1;
-                        if(table[turn-1]==null){ 
-                            table[turn+1].setPoint(10+table[turn+1].getPoint());
-                    System.out.println("!!!!!!!!!!!!PİSTİİİİ!!!!!!!!!!!!");
-                    boardsize =0;
-                }
-                for(cards win:table){
-                    if(win!= null){
-                        ppoint += win.getPoint();
-                    }
-                }
-                    for(int a=turn+1;a>=0;a--){
-                        table[a]=null;
-                    }
-                        boardsize = 0;
-                        break;
-                    }
-                    if(table[turn]!=null){ 
-                        if(table[turn+1].getNumberrank()==11){ 
-                            
-                            playerpocket +=boardsize+1;
-                            for(cards wincards: table){
-                                if(wincards!=null){
-                                    ppoint+= wincards.getPoint();
-                                    wincards =null;
-                                }
-                            }
-                            for(int a=turn+1;a>=0;a--){
-                                table[a]=null;
-                            }
-                            boardsize = 0;
-                        }
-                    }
-                }
-                turn++;
+        else{
+            for(int a=turn;a>0;a--){
+                if(table[a]!= null){
+                aipoint += table[a].getPoint();
+                table[a] = null;
+                aipocket++;
             }
-            if(i%2==0){
-                if(table[turn]!=null){ 
-                    for(cards smart: aihand){
-                        if(smart!=null){ 
-                        if(smart.getNumberrank()==table[turn].getNumberrank()){ 
-                            cardplayer(table,turn,smart);
-                            smart = null;
-                            boardsize++;
-                            if(table[turn-1]==null){ 
-                                table[turn+1].setPoint(10+table[turn+1].getPoint());
-                                System.out.println("!!!!!!!!!!!!PİSTİİİİ!!!!!!!!!!!!");
-                            }
-                            aipocket +=boardsize+1;
-                            for(int a=boardsize+1;a>=0;a--){
-                                table[a]=null;
-                            }
-                            boardsize = 0;
-                            turn++;
-                        }
-                    }
-                }
-                }
-                    int oyna = rd.nextInt(4);
-                while(aihand[oyna]==null) oyna = rd.nextInt(4);
-                cardplayer(table,turn,aihand[oyna]);
-                System.out.println("OPPONENT PLAYED THE:"+ table[turn+1].getNumber()+table[turn+1].getSuit());
-                aihand[oyna]=null;
-                    boardsize++;    
-                    if(table[turn]!=null){
-                    if(table[turn+1].getNumberrank()==11){ 
-                        aipocket +=boardsize+1;
-                        for(cards wincards: table){
-                            if(wincards!=null){
-                                aipoint+= wincards.getPoint();
-                            }
-                            for(int a =turn+1;a>=0;a--){
-                                table[a]= null;
-                            }
-                        }
-                        boardsize = 0;
-                        turn++; 
-                    }
-                }
-                }
             }
-        
+        }
         System.out.println("//// END OF THE GAME\\\\\\");
         System.out.println("You have "+playerpocket+" cards");
         System.out.println("AI have "+aipocket+" cards");

@@ -4,6 +4,7 @@ import java.util.Scanner;
 import java.io.IOException;
 import java.util.Formatter;
 import java.nio.file.Paths;
+import java.util.InputMismatchException;
 public class pisti {
 
     
@@ -147,7 +148,20 @@ public class pisti {
         System.out.println("CARDS ARE READY, SHUFFLING...");
         card =shuffler(card);
         System.out.println("CARDS ARE SHUFFLED, CHOOSE A NUMBER TO CUT");
-        int cutn=sc.nextInt();
+        int cutn;
+        while (true) {
+            System.out.print("Enter an integer: ");
+            try {
+              int num = sc.nextInt();
+              System.out.println("You entered: " + num);
+              cutn = num-1;
+              if(num<52&&num>0)break;
+              else System.out.println("Please enter an integer between 1,52");
+            } catch (java.util.InputMismatchException e) {
+              System.out.println("Invalid input. Please try again.");
+              sc.next();
+            }
+          }
         card = cutter(card,cutn-1);
         System.out.println("DEALING");
         cards[] phand = new cards[4];
@@ -162,10 +176,6 @@ public class pisti {
         int boardsize = 3;
         cards[] table = new cards[52];
         table = dealer(card,table,2,0);
-        for(cards i : phand){
-            System.out.print(i.getNumber());
-            System.out.println(i.getSuit());
-            }
         int turn =3;
         int dealturn =1;
         for(;usedcards<52;usedcards=usedcards+12){
@@ -182,14 +192,22 @@ public class pisti {
                         System.out.println(l.getSuit());
                         option++;}
                         }
-                    int play = sc.nextInt();
-                    while(phand[play-1]==null||play>4){ 
-                            System.out.println("You can't play that card,play a different card");
-                            play = sc.nextInt();
-                        
-                    }
-                    cardplayer(table,turn,phand[play-1]);
-                    phand[play-1] = null;
+                    int play;
+                    while (true) {
+                        System.out.print("Enter an integer: ");
+                        try {
+                          int num = sc.nextInt();
+                          System.out.println("You entered: " + num);
+                          play = num-1;
+                          if(num>0&&num<5)break;
+                          else System.out.println("please enter an integer  between 1,4");
+                        } catch (InputMismatchException e) {
+                          System.out.println("Invalid input. Please try again.");
+                          sc.next();
+                        }
+                      }
+                      cardplayer(table,turn,phand[play]);
+                      phand[play] =null;
                     boardsize++;
                     if(table[turn]!=null){ 
                     if(table[turn].getNumberrank()==table[turn+1].getNumberrank()){ 
@@ -296,24 +314,22 @@ public class pisti {
                     System.out.print(l.getNumber());
                     System.out.println(l.getSuit());
                     option++;}}
-                int play = sc.nextInt();
-                for(int j=0;j<turn;j++){
-                    if(phand[play-1]==null||play>4){
-                        System.out.println("You can't play that card,play a different card");
-                        
-                            try{ 
-                            play = sc.nextInt();
-                            
-                        }catch(Exception e){
-                                System.err.println("Enter an integer, please...");
-                            }
+                int play;
+                while (true) {
+                    System.out.print("Enter an integer: ");
+                    try {
+                      int num = sc.nextInt();
+                      System.out.println("You entered: " + num);
+                      play = num-1;
+                      if(num>0&&num<5)break;
+                          else System.out.println("please enter an integer  between 1,4");
+                    } catch (InputMismatchException e) {
+                      System.out.println("Invalid input. Please try again.");
+                      sc.next();
                     }
-                    
-                    else{
-                    }
-                }
-                cardplayer(table,turn,phand[play-1]);
-                phand[play-1] = null;
+                  }
+                cardplayer(table,turn,phand[play]);
+                phand[play] = null;
                 boardsize++;
                 if(table[turn]!=null){ 
                     if(table[turn].getNumberrank()==table[turn+1].getNumberrank()){ 
@@ -478,6 +494,5 @@ public class pisti {
         catch(IOException e){
             e.printStackTrace();
         }
-        
     }      
 }
